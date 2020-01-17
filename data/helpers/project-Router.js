@@ -16,4 +16,19 @@ router.post(`/`, () => {
     });
 });
 
+router.post(`/:id/project`, (req, res) => {
+  projectInfo = { ...req.body, project_id: req.params.id };
+  Projects.insert(projectInfo)
+    .then(project => {
+      res.status(210).json(project);
+    })
+    .catch(error => {
+      // Log error to the server
+      console.log(error);
+      res.status(500).json({
+        message: `There was an error handling this project`
+      });
+    });
+});
+
 module.exports = router;
