@@ -7,6 +7,7 @@ const server = express();
 
 server.use(express.json());
 server.use(helmet(/*The configuration of helmet will be done here*/));
+server.use(`/api/action`, actionRouter);
 server.use(`/api/project`, projectRouter);
 server.get(`/`, logger, (req, res) => {
   res.send(`<h2>Lambda Projects!</h2>`);
