@@ -68,4 +68,25 @@ router.delete(`/:id`, (req, res) => {
     });
 });
 
+// ENDPOINT TO UPDATE A PROJECT
+router.put(`/:id`, (req, res) => {
+  Projects.update(req.params.id, req.body)
+    .then(project => {
+      if (project) {
+        res.status(200).json(project);
+      } else {
+        res.status(404).json({
+          message: `Project could not be found`
+        });
+      }
+    })
+    .catch(error => {
+      //   Error logged to database
+      console.log(error);
+      res.status(404).json({
+        message: `Project could not be updated`
+      });
+    });
+});
+
 module.exports = router;
