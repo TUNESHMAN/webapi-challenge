@@ -3,7 +3,7 @@ const Projects = require(`./projectModel`);
 const router = express.Router();
 
 // ENDPOINT TO ADD A PROJECT
-router.post(`/`, () => {
+router.post(`/`, validateProject, () => {
   Projects.insert(req.body)
     .then(data => {
       res.status(200).json(data);
@@ -18,7 +18,7 @@ router.post(`/`, () => {
 });
 
 // ENDPOINT TO ADD A PROJECT BY ID
-router.post(`/:id/project`, (req, res) => {
+router.post(`/:id/project`,  (req, res) => {
   projectInfo = { ...req.body, project_id: req.params.id };
   Projects.insert(projectInfo)
     .then(project => {
@@ -88,5 +88,22 @@ router.put(`/:id`, (req, res) => {
       });
     });
 });
+
+// MY CUSTOM MIDDLEWARE LIVES HERE
+function validateProject(req, res, next) {
+  // I pulled the project from req.body
+  const project = req.body;
+  if (Object.keys(project).length <= 1) {
+    res.status(404).json({
+      message: `missing project information`
+    });
+  } else if (!project.desciption) {
+    res.status(400).json({
+      message: `missing project description field`
+    });
+  } else {
+    next();
+  }
+}
 
 module.exports = router;
